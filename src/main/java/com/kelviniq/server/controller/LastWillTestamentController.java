@@ -1,4 +1,4 @@
-/*
+
 package com.kelviniq.server.controller;
 
 import com.kelviniq.server.request.Lwt;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/kelviniq/v1")
+@RequestMapping({"/kelviniq/v1"})
 public class LastWillTestamentController {
 
     private final LastWillTestamentService lastWillTestamentService;
@@ -20,14 +20,13 @@ public class LastWillTestamentController {
         this.lastWillTestamentService = lastWillTestamentService;
     }
 
-    @PostMapping("/{deviceId}/lwt")
+    @PostMapping("/{device_id}/lwt")
     public ResponseEntity<String> ingest(
-            @PathVariable String deviceId,
+            @PathVariable("device_id") String deviceId,
             @RequestBody Lwt lwt) {
         try {
-
-          //  String result = lastWillTestamentService.handleLwt(deviceId, lwt);
-            return ResponseEntity.ok(null);
+            String result = lastWillTestamentService.updateDeviceStatus(deviceId, lwt);
+            return ResponseEntity.ok(result);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -36,5 +35,3 @@ public class LastWillTestamentController {
 
 
 
-
-*/

@@ -8,6 +8,7 @@ import com.kelviniq.server.repository.OrgRepository;
 import com.kelviniq.server.repository.SiteRepository;
 import com.kelviniq.server.request.DeviceRequest;
 import com.kelviniq.server.response.DeviceResponse;
+import com.kelviniq.server.response.OrgResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,24 @@ import java.time.OffsetDateTime;
 @Service
 public class DeviceService {
     @Autowired
-    private  DeviceRepository deviceRepository;
+    private DeviceRepository deviceRepository;
     @Autowired
-    private  OrgRepository orgRepository;
+    private OrgRepository orgRepository;
     @Autowired
-    private  SiteRepository siteRepository;
+    private SiteRepository siteRepository;
+
+    public DeviceResponse getDeviceByDeviceId(String deviceId) {
+        if (deviceId == null || deviceId.isBlank()) {
+            throw new IllegalArgumentException("Device id is required");
+        }
+
+        Device device = deviceRepository.findByDeviceId(deviceId);
+        if (device == null) {
+            throw new IllegalArgumentException("Device not found");
+        }
+
+        return toResponse(device);
+    }
 
     public DeviceResponse createDevice(DeviceRequest request) {
         if (request == null || request.getDeviceId() == null || request.getDeviceId().isBlank()) {
@@ -57,15 +71,19 @@ public class DeviceService {
         device.setCreatedAt(OffsetDateTime.now());
 
         Device saved = deviceRepository.save(device);
+        return toResponse(saved);
+    }
+
+    private DeviceResponse toResponse(Device device) {
         return new DeviceResponse(
-                saved.getId(),
-                saved.getDeviceId(),
-                saved.getOrg() != null ? saved.getOrg().getId() : null,
-                saved.getSite() != null ? saved.getSite().getId() : null,
-                saved.getLabel(),
-                saved.getClaimCode(),
-                saved.getFwVersion(),
-                saved.getReportIntervalS()
+                device.getId(),
+                device.getDeviceId(),
+                device.getOrg() != null ? new OrgResponse(device.getOrg().getId(), device.getOrg().getName()) : null,
+                device.getSite() != null ? device.getSite().getId() : null,
+                device.getLabel(),
+                device.getClaimCode(),
+                device.getFwVersion(),
+                device.getReportIntervalS()
         );
     }
 }

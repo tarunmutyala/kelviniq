@@ -3,7 +3,7 @@ package com.kelviniq.server.response;
 public record DeviceResponse(
         Long id,
         String deviceId,
-        Long orgId,
+        OrgResponse orgId,
         Long siteId,
         String label,
         String claimCode,

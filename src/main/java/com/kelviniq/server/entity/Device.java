@@ -23,7 +23,7 @@ public class Device {
     @Column(name = "device_id", unique = true, nullable = false)
     private String deviceId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "org_id")
     private Org org;
 
