@@ -45,4 +45,15 @@ public class LastWillTestamentService {
         deviceStateRepository.save(deviceState);
         return "State saved for device " + deviceId;
     }
+
+    public DeviceState getDeviceState(String deviceId) {
+        if (deviceId == null || deviceId.isBlank()) {
+            throw new IllegalArgumentException("deviceId is required");
+        }
+        Device device = lastWillTestamentRepository.findByDeviceId(deviceId);
+        if (device == null) {
+            throw new IllegalArgumentException("Device not found: " + deviceId);
+        }
+        return deviceStateRepository.findByDevice(device);
+    }
 }

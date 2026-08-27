@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping({"/api/v1", "/kelviniq/v1"})
+@RequestMapping({"/kelviniq/v1"})
 public class DeviceController {
     @Autowired
     private DeviceService deviceService;
